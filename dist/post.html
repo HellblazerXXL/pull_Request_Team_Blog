@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+
+  <div class="max-w-2xl mx-auto">
+    <article class="bg-white rounded shadow p-6 flex flex-col" id="postContent"></article>
+
+    <div id="commentSection" class="bg-white rounded shadow p-6 mt-4 hidden">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Comments</h2>
+
+      <div class="flex items-center space-x-2 mb-4">
+        <img src="/img/WhatsApp Image 2025-05-14 at 5.46.26 PM.jpeg" alt="User Avatar" class="w-8 h-8 rounded-full">
+        <input id="commentInput" type="text" placeholder="Write a comment..."
+               class="flex-1 text-sm border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <button onclick="addComment()" class="text-purple-900 font-semibold text-sm hover:underline">Post</button>
+      </div>
+
+      <div id="commentsList" class="space-y-3">
+        <div class="flex items-start space-x-2">
+          <img src="/img/logois.jpeg" alt="User Avatar" class="w-8 h-8 rounded-full">
+          <div class="bg-gray-100 rounded-lg p-2">
+            <p class="text-sm font-semibold text-gray-900">blockfuse labs cohort II</p>
+            <p class="text-sm text-gray-700">Sounds like an amazing event! 😊</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const allPosts = {
+      '1': {
+        title: "Starknet and Cairo bootcamps kicks off at Blockfuse Labs",
+        image: "/img/IMG_0195 copy.jpg",
+        author: "Pull Request Team",
+        date: "May 14, 2025",
+        content: "This is post 1 content."
+      },
+      '2': {
+        title: "Understanding StarkEx and dYdX",
+        image: "/img/WAL_2057.jpeg",
+        author: "Pull Request Team",
+        date: "May 14, 2025",
+        content: "This is post 2 content."
+      },
+      '3': {
+        title: "Why Cairo Matters for zk-rollups",
+        image: "/img/cairo.jpeg",
+        author: "Pull Request Team",
+        date: "May 14, 2025",
+        content: "This is post 3 content."
+      },
+      '4': {
+        title: "StarkNet and Ethereum Scalability",
+        image: "/img/save-ass.jpg",
+        author: "Pull Request Team",
+        date: "May 14, 2025",
+        content: "This is post 4 content."
+      }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+    const post = allPosts[postId];
+
+    if (post) {
+      document.getElementById('postContent').innerHTML = `
+        <h1 class="lg:text-2xl text-sm font-semibold mb-4">${post.title}</h1>
+        <img src="${post.image}" alt="Image for the post" class="w-full h-64 object-cover mb-4 rounded" />
+        <p class="text-sm text-gray-500 mb-2">by ${post.author} | ${post.date}</p>
+        <p class="text-gray-700 mb-4">${post.content}</p>
+        <a href="#" id="readMore" class="text-purple-900 hover:underline">comments...</a>
+      `;
+    } else {
+      document.getElementById('postContent').innerHTML = `
+        <p class="text-gray-700">Post not found. ID: ${postId || 'None'}</p>
+      `;
+    }
+
+    // Handle comment toggle
+    document.addEventListener('click', function (event) {
+      if (event.target.id === 'readMore') {
+        event.preventDefault();
+        document.getElementById('commentSection').classList.remove('hidden');
+        event.target.classList.add('hidden');
+      }
+    });
+
+    // Comment adding function
+    function addComment() {
+      const input = document.getElementById('commentInput');
+      const commentText = input.value.trim();
+      if (!commentText) return;
+
+      const commentHTML = `
+        <div class="flex items-start space-x-2">
+          <img src="https://via.placeholder.com/32" alt="User Avatar" class="w-8 h-8 rounded-full">
+          <div class="bg-gray-100 rounded-lg p-2">
+            <p class="text-sm font-semibold text-gray-900">You</p>
+            <p class="text-sm text-gray-700">${commentText}</p>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('commentsList').insertAdjacentHTML('beforeend', commentHTML);
+      input.value = '';
+    }
+  </script>
+
+</body>
+</html>
